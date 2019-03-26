@@ -3,6 +3,8 @@ THIS CODE IS MY OWN WORK, IT WAS WRITTEN WITHOUT CONSULTING A TUTOR OR CODE
 WRITTEN BY OTHER STUDENTS - NAOMI KEUSCH BAKER AND MARTIN SCHREINER
 */
 
+//Sources: https://sefiks.com/2017/02/20/building-neural-networks-with-weka/
+
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -15,9 +17,6 @@ import weka.classifiers.Evaluation;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
-
-import java.io.File;
-import java.io.IOException;
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.MultilayerPerceptron;
 
@@ -30,7 +29,7 @@ public class neuralNetwork {
         Instances inst = loader.getDataSet();
 		Remove remove = new Remove();
 		remove.setAttributeIndices("12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, last");
-		//remove.setAttributeIndices("12, last");
+
 		remove.setInvertSelection(true);
         remove.setInputFormat(inst);
 		Instances train = Filter.useFilter(inst, remove);
@@ -48,7 +47,6 @@ public class neuralNetwork {
 	  System.out.println(eval.toSummaryString("\nResults\n=====\n", true));
 	  System.out.println("Accuracy: " + eval.toClassDetailsString());
 	  System.out.println(eval.toMatrixString());
- 
   
   }
    
