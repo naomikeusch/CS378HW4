@@ -9,9 +9,13 @@ import weka.core.converters.ArffLoader;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.converters.CSVLoader;
 import weka.classifiers.Evaluation;
+import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 import java.io.File;
 
+//resources:
 /**
  * This example trains NaiveBayes incrementally on data obtained
  * from the ArffLoader.
@@ -20,25 +24,30 @@ import java.io.File;
  */
  
  // https://www.youtube.com/watch?v=q3Gf6kqaJWA
+ 
+ //https://www.researchgate.net/post/How_can_we_select_specific_attributes_using_WEKA_API
+ 
 public class classifiers {
 
-  /**
-   * Expects an ARFF file as first argument (class attribute is assumed
-   * to be the last attribute).
-   *
-   * @param args        the commandline arguments
-   * @throws Exception  if something goes wrong
-   */
   public static void main(String[] args) throws Exception {
 	  
+		File data = new File("grades.csv");
+	    CSVLoader loader = new CSVLoader();
+        loader.setSource(data);
+        Instances inst = loader.getDataSet();
+		Remove remove = new Remove();
+		remove.setAttributeIndices("12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, last");
+		remove.setInvertSelection(true);
+        remove.setInputFormat(inst);
+		Instances train = Filter.useFilter(inst, remove);
 	  
-	  BufferedReader br = new BufferedReader(new FileReader("grades.csv"));
+	//  BufferedReader br = new BufferedReader(new FileReader("grades.csv"));
 	  
-	  Instances train = new Instances(br);
+	 // Instances train = new Instances(br);
 	  
 	  train.setClassIndex(train.numAttributes() - 1);
 	  
-	  br.close();
+//br.close();
 	  
 	  NaiveBayes nb = new NaiveBayes();
 	  nb.buildClassifier(train);
