@@ -24,8 +24,8 @@ import weka.classifiers.Classifier;
 import java.io.File;
 
 //Command prompts:
-//javac -cp "C:\Program Files\Weka-3-8\weka.jar" classifiers.java
-//java -cp "C:\Program Files\Weka-3-8\weka.jar;C:\Users\naomi\OneDrive\Documents\Emory\Third Year\cs 378\hw4\hw4" classifiers
+//javac -cp "C:\Program Files\Weka-3-8\weka.jar" final_classifiers.java
+//java -cp "C:\Program Files\Weka-3-8\weka.jar;C:\Users\naomi\OneDrive\Documents\Emory\Third Year\cs 378\hw4\hw4" final_classifiers
 
 //References:
 
@@ -41,7 +41,7 @@ import java.io.File;
  
 //https://www.codingame.com/playgrounds/5844/machine-learning-with-java---part-4-decision-tree
  
-public class ensemble {
+public class final_classifiers {
 
   public static void main(String[] args) throws Exception {
 	  
