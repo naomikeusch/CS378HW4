@@ -48,35 +48,39 @@ public class ensemble {
 		// PrintWriter out = new PrintWriter("results.txt");
 		
 		String s = "";
-		for(int i = 12; i<=23; i++){
-			File data = new File("grades2.csv");
-			CSVLoader loader = new CSVLoader();
+		for(int i = 12; i<=23; i++){								//continues to add each quiz to the classifier
+			File data = new File("grades.csv");
+			CSVLoader loader = new CSVLoader();						//read data file
 			loader.setSource(data);
 			Instances inst = loader.getDataSet();
 			Remove remove = new Remove();
-			s += i +", ";
-			remove.setAttributeIndices(s + "last");
+			s += i +", ";											//update which quizzes to include
+			remove.setAttributeIndices(s + "last");					//remove selected quizzes, then invert to only look at those selected
 			remove.setInvertSelection(true);
 			remove.setInputFormat(inst);
-			Instances train = Filter.useFilter(inst, remove);
+			Instances train = Filter.useFilter(inst, remove);		//prepare instances and chosen attributes to consider
 		  
-			train.setClassIndex(train.numAttributes() - 1);
+			train.setClassIndex(train.numAttributes() - 1);			//set the class of interest to the last class (letter grade)
 			
-			Evaluation eval_mlp = new Evaluation(train);
+			
 
 		  
+		  /* First Classifier: MultilayerPerceptron is a type of neural network */
 			MultilayerPerceptron mlp = new MultilayerPerceptron();
 	 
-			mlp.buildClassifier(train);
-
+			mlp.buildClassifier(train);								//build the classifier
 			
-			eval_mlp.crossValidateModel(mlp, train, 10 , new Random(1));
+			Evaluation eval_mlp = new Evaluation(train);			//Evaluation used for analysis, get statistics
+			
+			eval_mlp.crossValidateModel(mlp, train, 10 , new Random(1));	//compares classified to actual
 			
 			System.out.println("MLP - Quizzes up to " + (i-11));
-			System.out.println(eval_mlp.toSummaryString("\nResults\n=====\n", true));
+			System.out.println(eval_mlp.toSummaryString("\nResults\n=====\n", true));		//print results: precision, recall, etc
 			System.out.println("Accuracy: " + eval_mlp.toClassDetailsString());
-			System.out.println(eval_mlp.toMatrixString());
+			System.out.println(eval_mlp.toMatrixString());						//confusion matrix
 			
+			
+			/* Second Classifier: Random Tree */
 			Classifier tree = new RandomTree();
 			
 			tree.buildClassifier(train);
@@ -91,6 +95,7 @@ public class ensemble {
 			System.out.println(eval_tree.toMatrixString());
 		
 		  
+		  /* Third Classifier: Naive Bayes */
 			NaiveBayes nb = new NaiveBayes();
 			nb.buildClassifier(train);
 			
@@ -104,13 +109,12 @@ public class ensemble {
 			System.out.println(eval_nb.toMatrixString());
 			
 			
+			/* Fourth classifier: Ensemble (Vote class in Weka) */
 			Vote vote = new Vote();
-			vote.addPreBuiltClassifier(nb);
+			vote.addPreBuiltClassifier(nb);			//Add each of the three previous classifiers to the ensemble
 			vote.addPreBuiltClassifier(mlp);
 			vote.addPreBuiltClassifier(tree);
 			vote.buildClassifier(train);
-			
-			
 			
 			Evaluation eval_vt = new Evaluation(train);
 			
